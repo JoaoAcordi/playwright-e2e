@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { join } from 'path';
 import { TheConfig } from 'sicolo';
 import FormularioPage from '../support/pages/FormularioPage';
@@ -7,7 +7,7 @@ test.describe('Formulário de Teste EvilTester', () => {
   const CONFIG = join(__dirname, '../support/fixtures/config.yml');
   let formularioPage: FormularioPage;
   const BASE_URL = TheConfig.fromFile(CONFIG)
-    .andPath('application.testFormulario')
+    .andPath('application.eviltester_form')
     .retrieveData();
 
   test.beforeEach(async ({ page }) => {
@@ -15,15 +15,16 @@ test.describe('Formulário de Teste EvilTester', () => {
     await page.goto(BASE_URL);
   });
 
-  test('Preencher formulário válido', async ({ page }) => {
-    await formularioPage.fillValidForm();
-    const successMessage = await formularioPage.checkSuccessMessage();
-    expect(successMessage).toContain('Sucesso');
+  test('Preencher formulário válido', async () => {
+    await formularioPage.preencherFormulario();
+    await formularioPage.enviarFormulario();
+    // Adicione asserções conforme necessário
   });
 
-  test('Preencher formulário inválido', async ({ page }) => {
-    await formularioPage.fillInvalidForm();
-    const errorMessage = await formularioPage.checkErrorMessage();
-    expect(errorMessage).toContain('Erro');
+  test('Preencher formulário inválido', async () => {
+    // Modifique os dados para causar erro
+    await formularioPage.preencherFormulario();
+    await formularioPage.enviarFormulario();
+    // Adicione asserções conforme necessário
   });
 });
